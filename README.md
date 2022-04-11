@@ -1,2 +1,2 @@
-# crypto-galary
+# crypto-gallery
 a blockchain art marketplace
