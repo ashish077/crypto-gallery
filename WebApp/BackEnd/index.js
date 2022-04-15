@@ -11,48 +11,42 @@ app.use(
 );
 
 var item=
-    
   [
-        {
+    {
       "id": 1,
       "title": "Brown eggs",
-      "description": "Raw organic brown eggs in a basket",
-      
-    }, {
+      "description": "Raw organic brown eggs in a basket",      
+    }, 
+    {
       "id": 2,
       "title": "Sweet fresh stawberry",
-      "description": "Sweet fresh stawberry on the wooden table",
-      
-    }, {
+      "description": "Sweet fresh stawberry on the wooden table",      
+    }, 
+    {
       "id": 3,
       "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
+      "description": "Asparagus with ham on the wooden table",      
     },
     {
       "id": 4,
       "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
+      "description": "Asparagus with ham on the wooden table",      
     },
     {
       "id": 5,
       "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
+      "description": "Asparagus with ham on the wooden table",      
     },
     {
       "id": 6,
       "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
+      "description": "Asparagus with ham on the wooden table",      
     }
   ];
 
 
 
 app.get("/", (req, res) => {
-    
   res.set('Access-Control-Allow-Origin', '*');
   res.json(item);
 });

@@ -2,8 +2,6 @@ import React from 'react'
 import Item from './Item'
 
 function Itemlist({painting}) {
-  
-  
  {/*
   const handleClick = (i) => {
      
@@ -16,11 +14,10 @@ function Itemlist({painting}) {
 */}
 
   return (
-   
     <div className="itemList">
-      {   painting.map(item=>(<Item key={item.id} item={item} />))
-
-                }
+      {  
+        painting.map(item=>(<Item key={item.id} item={item} />))
+      }
     </div>
   )
 }
