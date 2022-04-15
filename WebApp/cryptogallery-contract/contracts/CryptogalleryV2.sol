@@ -14,7 +14,7 @@ contract Cryptogallery {
     }
     
     mapping(uint => artDetails) artData;
-    mapping(uint => bool) artsSold;
+    mapping(uint => bool) artOnSale;
 
     mapping(address => uint[]) public artOwners; //Mapping to hold the list of uids bought by a buyer.
     mapping(address => uint[]) public artSellers; //Mapping to hold the list of uids sold by an artist.
@@ -54,6 +54,8 @@ contract Cryptogallery {
         art.owner = msg.sender;
         artData[uid] = art;
 
+        artOnSale[uid] == true;
+
         uid = uid + 1; // Increment uid for future additions.
         // uid = artData.length + 1; // Check this later
         return uid; // Return the unique id created for the art.
@@ -67,6 +69,7 @@ contract Cryptogallery {
         artData[artId].artistAddress.transfer(msg.value);
 
         artOwners[msg.sender].push(artId);
+        artOnSale[artId] = false;
 
         return true;
     }
@@ -76,7 +79,7 @@ contract Cryptogallery {
     }
 
     function manageArt(uint artId, uint updatedPrice) external onlyArtist(artId) returns(bool success){
-        require(artsSold[artId] == false);
+        require(artOnSale[artId] == true);
         artData[artId].price = updatedPrice;
         return true;
     }
