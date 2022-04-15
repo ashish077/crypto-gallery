@@ -4,13 +4,13 @@ contract Cryptogallery {
     address payable public owner;
     uint uid;
 
-    struct artDetails {
-        uint id;
+    struct artDetails {        
         address payable artistAddress;
+        address owner;
         string artistName;
         string description;
-        uint price;
-        address owner;
+        uint8 price;
+        uint id;
     }
     
     mapping(uint => artDetails) artData;
@@ -23,7 +23,7 @@ contract Cryptogallery {
     mapping(address => int) public users;
 
     modifier onlyRegisteredUser {
-        require(users[msg.sender] == 1);
+        require(users[msg.sender] == 1, "This user is not registered.");
         _;
     }
 
@@ -44,7 +44,7 @@ contract Cryptogallery {
         userNames[msg.sender] = name;
     }
     
-    function addArt(string memory description, uint price) public onlyRegisteredUser returns(uint artuid) {
+    function addArt(string memory description, uint8 price) public onlyRegisteredUser returns(uint artuid) {
         artDetails memory art;
         art.id = uid; // Generates a unique identifier for the art being added
         art.artistAddress = msg.sender;
@@ -78,7 +78,7 @@ contract Cryptogallery {
         return address(this).balance;
     }
 
-    function manageArt(uint artId, uint updatedPrice) external onlyArtist(artId) returns(bool success){
+    function manageArt(uint artId, uint8 updatedPrice) external onlyArtist(artId) returns(bool success){
         require(artOnSale[artId] == true);
         artData[artId].price = updatedPrice;
         return true;

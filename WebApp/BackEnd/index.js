@@ -1,5 +1,5 @@
 const express = require("express");
-var fs=require("fs")
+var fs = require("fs")
 const app = express();
 const port = 4000;
 
