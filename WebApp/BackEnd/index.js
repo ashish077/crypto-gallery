@@ -1,7 +1,9 @@
 const express = require("express");
 var fs=require("fs")
+var cors=require("cors")
 const app = express();
 const port = 4000;
+
 
 app.use(express.json());
 app.use(
@@ -10,57 +12,40 @@ app.use(
   })
 );
 
-var item=
-    
-  [
-        {
-      "id": 1,
-      "title": "Brown eggs",
-      "description": "Raw organic brown eggs in a basket",
-      
-    }, {
-      "id": 2,
-      "title": "Sweet fresh stawberry",
-      "description": "Sweet fresh stawberry on the wooden table",
-      
-    }, {
-      "id": 3,
-      "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
-    },
-    {
-      "id": 4,
-      "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
-    },
-    {
-      "id": 5,
-      "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
-    },
-    {
-      "id": 6,
-      "title": "Asparagus",
-      "description": "Asparagus with ham on the wooden table",
-      
-    }
-  ];
+app.use(cors())
 
-
-
-app.get("/", (req, res) => {
-    
-  res.set('Access-Control-Allow-Origin', '*');
-  res.json(item);
+app.get("/", (_req, res) => {
+   
+  let data;
+  fs.readFile( __dirname + "/" + "list.json", 'utf8', function (_err, itemb) {
+   data = JSON.parse(itemb);
+   
+  console.log(data);
+  res.set('Access-Control-Allow-Origin','*');
+  //res.end(JSON.stringify(data)); 
+  res.send(JSON.stringify(data));
+  });
+  
 });
 
-app.get("/")
+app.patch('/:id', async (req,res) =>{
+  //fetch file details in an object
+  let content = JSON.parse(fs.readFileSync(__dirname + "/" + "list.json", 'utf8'));
+//update details
+console.log(content[req.params.id]);
+
+content[req.params.id-1].sold ="true";
+console.log(content[req.params.id]);
+//write file
+ const response=await fs.writeFileSync(__dirname + "/" + "list.json", JSON.stringify(content));
+ res.json(JSON.stringify(content));
+
+});
+
+
 
 /* Error handler middleware */
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
     const statusCode = err.statusCode || 500;
     console.error(err.message, err.stack);
     res.status(statusCode).json({ message: err.message });

@@ -1,11 +1,18 @@
 
 import React from 'react'
-import Card from 'react-bootstrap/Card'
-import Button from 'react-bootstrap/Button'
 import '../css/item.css'
 
-function Item({item}) {
+function Item({item,onClick}) {
   
+  function checkSold(){
+    if(item.sold==="true"){
+           return (<h2 style={{color:"red"}}>SOLD</h2>);
+    }
+    else
+    {
+      return ( <button className="buy btn btn-success" onClick={onClick} >Buy</button>); 
+    }
+  }
   return (
     <div className="card" >
   
@@ -17,7 +24,9 @@ function Item({item}) {
                         <div className="card-content">
                             <h2>{item.title}</h2>
                             <p>{item.description}</p>
-                            <button className="buy btn btn-success" >Buy</button>
+                            <h3>Price:{item.amount} eth</h3>
+                             {checkSold()}
+                           
                         </div>
                     </a>
                 
