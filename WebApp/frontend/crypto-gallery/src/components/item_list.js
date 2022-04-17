@@ -8,7 +8,7 @@ function Itemlist({painting,onClick}) {
    
     <div className="itemList">
       {   
-       painting.map((item)=>(<Item key={item.id} item={item} onClick={()=> onClick(item.id)} />))
+       painting.map((item)=>(<Item key={item.id} item={item} onClick={()=> onClick(item)} />))
 
       }
     </div>
