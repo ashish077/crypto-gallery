@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Dolphins",
+    "description": "Dolphins at Sunset",
+    "price": "12",
+    "src": "http://localhost:4000/images/1650237760385-p02.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Scenery",
+    "description": "Water Colors",
+    "price": "12",
+    "src": "http://localhost:4000/images/1650237792498-p03.jpg"
+  }
+]
