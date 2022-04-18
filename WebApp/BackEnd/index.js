@@ -80,34 +80,19 @@ app.post("/addart", (req, res, err) => {
   }) 
 });
 
-// app.post("/addart", upload.single('image'), function(req, res) {
-//   console.log("Req Body: ");
-//   console.log(req.body);
+app.patch('/:id', async (req,res) =>{
+  //fetch file details in an object
+  let content = JSON.parse(fs.readFileSync(__dirname + "/" + "list.json", 'utf8'));
+//update details
+console.log(content[req.params.id]);
 
-//   let data;
-//   fs.readFile( __dirname + "/" + "list.json", 'utf8', function (_err, items) {
-//   data = JSON.parse(items);
+content[req.params.id-1].sold ="true";
+console.log(content[req.params.id]);
+//write file
+ const response=await fs.writeFileSync(__dirname + "/" + "list.json", JSON.stringify(content, null, 2));
+ res.json(content);
 
-//   console.log("Inside post");
-//   console.log(data);
-//   });
-//   // console.log(data);
-//   // var newItem = {
-//   //   id: id,
-//   //   title: req.body.title,
-//   //   description: req.body.description,
-//   //   price: req.body.price,
-//   //   src: req.file.filename
-//   // };  
-//   // // data.push(newItem);
-//   // console.log(data);
-//   // console.log(newItem);
-//   // fs.writeFile(__dirname + "/" + "list.json", JSON.stringify(data), err => {  
-//   //   console.log("New data added");
-//   // });
-
-//   return res.status(200); 
-// });
+});
 
 
 

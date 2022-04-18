@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import axios from "axios";
+import getConnection  from './connection.js';
+import { ethers, providers } from 'ethers';
 
 class AddArt extends Component {
 
@@ -20,6 +22,10 @@ class AddArt extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        getConnection().then(({provider, contract}, err) => {
+            this.contract = contract;
+            this.provider = provider;
+        });
     }
 
     // async componentDidMount() {

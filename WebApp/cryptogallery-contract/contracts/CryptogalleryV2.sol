@@ -1,4 +1,5 @@
 pragma solidity ^0.6.2;
+// SPDX-License-Identifier: UNLICENSED
 contract CryptogalleryV2 {
 
     address payable public owner;
@@ -11,7 +12,6 @@ contract CryptogalleryV2 {
         string description;
         uint8 price;
         uint id;
-        uint artId;
     }
     
     mapping(uint => artDetails) public artData;
@@ -44,21 +44,19 @@ contract CryptogalleryV2 {
         users[msg.sender] = 1;
     }
     
-    function addArt(string calldata description, uint8 price) external onlyRegisteredUser returns(uint artuid) {
+    function addArt(uint id, string calldata description, uint8 price) external onlyRegisteredUser returns(uint artuid) {
         artDetails memory art;
-        art.id = uid; // Generates a unique identifier for the art being added
+        art.id = id; // Generates a unique identifier for the art being added
         art.artistAddress = msg.sender;
-        // art.artistName = userNames[msg.sender];
         art.description = description;
         art.price = price;
         art.owner = msg.sender;
-        artData[uid] = art;
+        artData[id] = art;
 
-        artOnSale[uid] = true;
+        artOnSale[id] = true;
 
         uid = uid + 1; // Increment uid for future additions.
-        // uid = artData.length + 1; // Check this later
-        return uid; // Return the unique id created for the art.
+        return id; // Return the unique id created for the art.
     }
 
     function purchaseArt(uint artId) external onlyRegisteredUser payable  returns(bool success){

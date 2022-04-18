@@ -47,8 +47,6 @@ class Home extends Component {
       } catch (err) {
         console.log("Exception occurred while trying to fetch current metamask address.");
       }
-      console.log(item);
-      console.log(String(ethers.utils.parseEther(String(item.price))));
       
       //if response is ok then call the contract to make the transaction with the address and amount
       const cryptocontract = this.contract;
@@ -58,7 +56,11 @@ class Home extends Component {
       });
       if(buy !== undefined){
           await buy.wait()
-          //const response= await fetch(`http://localhost:4000/`+ item.id,{method: 'PATCH'});
+          await fetch(`http://localhost:4000/`+ item.id,{method: 'PATCH'})
+            .then(response => response.json())
+            .then(data =>{
+              this.setState({paintings: data});
+            });
       }
     }
 
