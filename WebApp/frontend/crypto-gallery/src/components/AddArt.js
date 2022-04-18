@@ -64,11 +64,7 @@ class AddArt extends Component {
         console.log(formData);
         await fetch('http://localhost:4000/addart', {
             method: 'POST',
-            // headers: {
-            //     'Accept': 'application/json',
-            //     'Access-Control-Allow-Origin': '*',
-            //     'Content-Type': 'multipart/form-data'
-            // },
+           
             body: formData,
         }).then((res) => {
             alert("Upload success");

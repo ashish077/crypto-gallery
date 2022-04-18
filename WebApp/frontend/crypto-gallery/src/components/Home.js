@@ -34,13 +34,9 @@ class Home extends Component {
 
         return (
             <div>
-              {/*Banner will have the heading of the marketplace */}
-              {/* <AppNavbar/> */}
+            
               <Container fluid>
-                {/* <div className="float-right">
-                  <Button color="dark" tag={Link} to={'/art/new'} style={{ margin: '.5rem' }}>Add Art</Button>
-                  <Button color="dark" tag={Link} to={'/register'}>Register</Button>
-                </div> */}
+              
                 <div className="Paintings">
                   {/*populate a item list of all the paintings using desc from reading a json */}
                   <Itemlist className="itemList" paintings={paintings}/>
