@@ -4,13 +4,21 @@ import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
 import { Button, Container, ButtonGroup} from 'reactstrap';
 import '../css/item_list.css';
-import Banner from './Banner';
+import getConnection  from './connection.js';
 import Itemlist from './item_list';
+import { ethers, providers } from 'ethers';
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {paintings: []};
+        this.contract = {};
+        this.provider = {};
+        this.handleBuy = this.handleBuy.bind(this);
+        getConnection().then(({provider, contract}, err) => {
+            this.contract = contract;
+            this.provider = provider;
+        });
     }
 
     componentDidMount() {
@@ -29,6 +37,31 @@ class Home extends Component {
   
     //   },[]);
 
+    async handleBuy(item){      
+      try {
+        const addressArray = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const currentAddress = addressArray[0];
+        console.log(currentAddress);
+      } catch (err) {
+        console.log("Exception occurred while trying to fetch current metamask address.");
+      }
+      console.log(item);
+      console.log(String(ethers.utils.parseEther(String(item.price))));
+      
+      //if response is ok then call the contract to make the transaction with the address and amount
+      const cryptocontract = this.contract;
+      const buy = await cryptocontract.purchaseArt(parseInt(item.id), {value:String(ethers.utils.parseEther(String(item.price)))})
+      .catch(function(e){
+        console.log("Exception");
+      });
+      if(buy !== undefined){
+          await buy.wait()
+          //const response= await fetch(`http://localhost:4000/`+ item.id,{method: 'PATCH'});
+      }
+    }
+
     render() {
         const {paintings} = this.state;
 
@@ -43,7 +76,7 @@ class Home extends Component {
                 </div> */}
                 <div className="Paintings">
                   {/*populate a item list of all the paintings using desc from reading a json */}
-                  <Itemlist className="itemList" paintings={paintings}/>
+                  <Itemlist className="itemList" paintings={paintings} onClick={this.handleBuy}/>
                 </div>
               </Container>
             </div>

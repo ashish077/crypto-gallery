@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <=0.6.0;
+pragma solidity ^0.6.2;
 contract CryptogalleryV1 {
 
     address payable public owner;
@@ -24,14 +24,14 @@ contract CryptogalleryV1 {
     }
     
      
-    function purchaseArt(uint artId, uint price) public payable{
-        owner.transfer(price);
+    function purchaseArt(uint artId) payable external{
+        owner.transfer(msg.value);
         artOwners[msg.sender].id = artId;
-        artOwners[msg.sender].price = price;
+        artOwners[msg.sender].price = msg.value;
     }
 
     function getbalance() public view returns (uint balance){
-        return address(this).balance;
+        return owner.balance;
     }
     
 }
