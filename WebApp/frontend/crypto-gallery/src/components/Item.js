@@ -7,12 +7,15 @@ import getConnection  from './connection.js';
 import { ethers, providers } from 'ethers';
 
 function Item({item, onClick}) {
-  // let [cryptocontract, setContract] = useState(undefined);
-  // getConnection().then(({provider, contract}, err) => {
-  //   setContract(contract);
-  //   console.log(cryptocontract);
-  // });
-  
+  function checkSold(){
+    if(item.sold==="true"){
+           return (<h2 style={{color:"red"}}>SOLD OUT</h2>);
+    }
+    else
+    {
+      return (<Button variant="primary" onClick={onClick} className="buy btn btn-success" >Buy</Button>); 
+    }
+  }  
 
   return (
     <Card style={{ width: '18rem', height: '30rem' }}>
@@ -31,7 +34,8 @@ function Item({item, onClick}) {
         {/* <Card.Text>
           <Button variant="primary" className="buy btn btn-success" >Buy</Button>
         </Card.Text> */}
-        <Button variant="primary" onClick={onClick} className="buy btn btn-success" >Buy</Button>
+        {/* <Button variant="primary" onClick={onClick} className="buy btn btn-success" >Buy</Button> */}
+        {checkSold()}
       </Card.Body>
 
     </Card>
