@@ -4,7 +4,7 @@ var fs = require("fs");
 const multer = require('multer');
 const app = express();
 var cors = require('cors');
-const port = 4000;
+const port = process.env.PORT|| 4000;
 var id = 100;
 
 const storage = multer.diskStorage({

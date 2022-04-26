@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +14,15 @@
     "node": "16.x"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "multer": "^1.4.4",
-    "cors": "^2.8.5",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "parcel-bundler": "^1.12.5"
   },
   "nodemonConfig": {
-    "ignore": ["list.json"]
+    "ignore": [
+      "list.json"
+    ]
   }
 }
