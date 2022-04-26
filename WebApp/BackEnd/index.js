@@ -29,7 +29,8 @@ app.use(
 );
 
 if (process.env.NODE_ENV === 'production')
-| app.use(express.static('../frontend/crypto-gallery/build'));
+{
+ app.use(express.static('../frontend/crypto-gallery/build'));
 }
 app.get("/", (_req, res) => {
 
