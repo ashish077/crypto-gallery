@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Navbar, NavbarBrand, Nav, Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import getConnection  from './connection.js';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faPalette,faPaintBrush } from '@fortawesome/free-solid-svg-icons';
 export default class AppNavbar extends Component {
     constructor(props) {
         super(props);
@@ -46,7 +47,10 @@ export default class AppNavbar extends Component {
     render() {
         return <div className='appnavbar'>
             <Navbar bg="light" variant="light">
-                <NavbarBrand tag={Link} to={"/"} style={{margin: '.5rem', color: '#000000', fontSize: '40px', fontFamily:"fantasy"}}>Crypto Gallery</NavbarBrand>
+                <NavbarBrand tag={Link} to={"/"} style={{margin: '.5rem', color: '#000000', fontSize: '40px', fontFamily:"fantasy"}}>
+                    Crypto Gallery <FontAwesomeIcon icon={faPalette} />
+                    <FontAwesomeIcon icon={faPaintBrush} />
+                    </NavbarBrand>
                     <div className="float-left">
                         <Button color="dark" tag={Link} to={'/art/new'} style={{ margin: '.5rem' }}>Add Art</Button>
                         <Button color="dark" onClick={this.handleRegister} style={{ margin: '.5rem' }}>Register</Button>
