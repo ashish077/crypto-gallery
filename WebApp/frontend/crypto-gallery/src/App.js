@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/Home';
 import AddArt from './components/AddArt';
 import AppNavbar from './components/AppNavbar';
+import getConnection  from './components/connection.js';
 
 function App(){
   if(typeof window.ethereum ==='undefined')
@@ -12,7 +13,14 @@ function App(){
         <h1>Please Install Metamask to Interact</h1>
       );
   }
-  return (
+  else{
+    getConnection().then(({provider, contract}, err) => {
+      console.log(window.contract);
+      console.log(window.provider);
+    });
+  }
+  
+  return (    
     <Router>
       <AppNavbar/>
       <Switch>

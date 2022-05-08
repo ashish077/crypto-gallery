@@ -6,11 +6,11 @@ contract CryptogalleryV2 {
     uint uid;
 
     struct artDetails {        
-        address payable artistAddress;
+        address artistAddress;
         address owner;
         string artistName;
         string description;
-        uint8 price;
+        uint price;
         uint id;
     }
     
@@ -44,7 +44,7 @@ contract CryptogalleryV2 {
         users[msg.sender] = 1;
     }
     
-    function addArt(uint id, string calldata description, uint8 price) external onlyRegisteredUser returns(uint artuid) {
+    function addArt(uint id, string calldata description, uint price) external onlyRegisteredUser returns(uint artuid) {
         artDetails memory art;
         art.id = id; // Generates a unique identifier for the art being added
         art.artistAddress = msg.sender;

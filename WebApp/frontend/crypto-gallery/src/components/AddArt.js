@@ -22,18 +22,12 @@ class AddArt extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        getConnection().then(({provider, contract}, err) => {
-            this.contract = contract;
-            this.provider = provider;
-        });
+        // getConnection().then(({provider, contract}, err) => {
+        //     this.contract = contract;
+        //     this.provider = provider;
+        // });
     }
 
-    // async componentDidMount() {
-    //     if (this.props.match.params.id !== 'new') {
-    //         const painting = await (await fetch(`/paintings/${this.props.match.params.id}`)).json();
-    //         this.setState({item: painting});
-    //     }
-    // }
 
     handleChange(event) {
         const target = event.target;
@@ -60,6 +54,7 @@ class AddArt extends Component {
     }
 
     async handleSubmit(event) {
+        var newId;
         event.preventDefault();
         const item = {...this.state.item};
         const formData = new FormData();
@@ -67,20 +62,27 @@ class AddArt extends Component {
         formData.append("description", item.description);
         formData.append("price", item.price);
         formData.append("image", item.image);
+        formData.append("owner", window.addressArray[0]);
         console.log(formData);
         await fetch('http://localhost:4000/addart', {
             method: 'POST',
-           
+        
             body: formData,
-        }).then((res) => {
+        }).then((res) => res.json())
+        .then(data => {
+            newId = data.id;
             alert("Upload success");
-          })
-        .catch((err) => alert("File Upload Error"));
-        // axios.post('http://localhost:4000/addart', item)
-        // .then((res) => {
-        //     alert("File Upload success");
-        //   })
-        // .catch((err) => alert("File Upload Error"));
+        })
+        .catch((err) => alert("File Upload Error" + err));
+        const cryptocontract = window.contract;
+        const addArt = await cryptocontract.addArt(parseInt(newId), item.description, item.price, {value:String(ethers.utils.parseEther(String(0)))})
+        .catch(function(e){
+            console.log("Exception while trying to Add Art to contract." + e);
+        });
+        if(addArt == undefined){
+            console.log("Add Art smart contract function not executed.");
+        }
+
         this.props.history.push('/');
     }
 

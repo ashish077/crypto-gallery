@@ -33,7 +33,6 @@ app.get("/", (_req, res) => {
   fs.readFile( __dirname + "/" + "list.json", 'utf8', function (_err, items) {
   data = JSON.parse(items);
 
-  console.log(data);
   res.set('Access-Control-Allow-Origin','*');
   res.send(JSON.stringify(data));
   });
@@ -43,7 +42,6 @@ app.get("/", (_req, res) => {
 app.get("/");
 
 app.post("/addart", (req, res, err) => {
-    console.log(req.body);
     upload(req, res, function(error){
     if (error instanceof multer.MulterError) {
       return res.status(500).json(error);
@@ -54,43 +52,48 @@ app.post("/addart", (req, res, err) => {
 
     console.log("Successfully uploaded files");
     let data;
+    var newId;
+    let filename = "";
+    if(req.file != null){
+      filename = req.file.filename;
+    }
     fs.readFile( __dirname + "/" + "list.json", 'utf8', function (_err, items) {
-        data = JSON.parse(items);
-
-        console.log("Inside post");
-        console.log(data);
+      data = JSON.parse(items);
+      
+      // console.log("Inside post");
+      // console.log(data);
+      newId = data.length + 1;
         var newItem = {
-          id: data.length + 1,
+          id: newId,
           title: req.body.title,
           description: req.body.description,
           price: req.body.price,
-          src: 'http://localhost:4000/images/' + req.file.filename
+          src: 'http://localhost:4000/images/' + filename,
+          owner: req.body.owner
         };
         data.push(newItem);
         console.log(data);
 
-        fs.writeFile(__dirname + "\\" + "list.json", JSON.stringify(data, null, 2), err => {  
+        fs.writeFile(__dirname + "\\" + "list.json", JSON.stringify(data, null, 2), err => {
               console.log("New data added");
             });
 
-    });
-
-    res.json({ message: "Successfully uploaded files" });
-    return res.status(200);
+        res.json({ message: "Successfully uploaded files", id: String(newId) });
+        return res.status(200);
+      });      
   }) 
 });
 
-app.patch('/:id', async (req,res) =>{
+app.put('/:id/:buyer', (req,res) =>{
   //fetch file details in an object
   let content = JSON.parse(fs.readFileSync(__dirname + "/" + "list.json", 'utf8'));
-//update details
-console.log(content[req.params.id]);
-
-content[req.params.id-1].sold ="true";
-console.log(content[req.params.id]);
-//write file
- const response=await fs.writeFileSync(__dirname + "/" + "list.json", JSON.stringify(content, null, 2));
- res.json(content);
+  //update details
+  
+  content[req.params.id-1].sold ="true";
+  content[req.params.id-1].owner =[req.params.buyer];
+  //write file
+  fs.writeFileSync(__dirname + "/" + "list.json", JSON.stringify(content, null, 2));
+  res.json(content);
 
 });
 

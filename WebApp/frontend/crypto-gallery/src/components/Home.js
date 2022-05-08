@@ -15,10 +15,10 @@ class Home extends Component {
         this.contract = {};
         this.provider = {};
         this.handleBuy = this.handleBuy.bind(this);
-        getConnection().then(({provider, contract}, err) => {
-            this.contract = contract;
-            this.provider = provider;
-        });
+        // getConnection().then(({provider, contract}, err) => {
+        //     this.contract = contract;
+        //     this.provider = provider;
+        // });
     }
 
     componentDidMount() {
@@ -38,29 +38,36 @@ class Home extends Component {
     //   },[]);
 
     async handleBuy(item){      
-      try {
-        const addressArray = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        const currentAddress = addressArray[0];
-        console.log(currentAddress);
-      } catch (err) {
-        console.log("Exception occurred while trying to fetch current metamask address.");
-      }
+      // try {
+      //   const addressArray = await window.ethereum.request({
+      //     method: "eth_requestAccounts",
+      //   });
+      //   window.addressArray = addressArray;
+      //   const currentAddress = addressArray[0];
+      //   console.log(currentAddress);
+      // } catch (err) {
+      //   console.log("Exception occurred while trying to fetch current metamask address.");
+      // }
       
       //if response is ok then call the contract to make the transaction with the address and amount
-      const cryptocontract = this.contract;
+      // const cryptocontract = this.contract;
+      const cryptocontract = window.contract;
+      const currentAddress = window.addressArray[0];
       const buy = await cryptocontract.purchaseArt(parseInt(item.id), {value:String(ethers.utils.parseEther(String(item.price)))})
       .catch(function(e){
-        console.log("Exception");
+        console.log("Exception while trying to Buy Art.");
       });
       if(buy !== undefined){
-          await buy.wait()
-          await fetch(`http://localhost:4000/`+ item.id,{method: 'PATCH'})
-            .then(response => response.json())
-            .then(data =>{
-              this.setState({paintings: data});
-            });
+          await buy.wait();
+          await fetch('http://localhost:4000/'+item.id + '/'+ currentAddress,
+          {
+            method: 'PUT'
+          }
+          )
+          .then(response => response.json())
+          .then(data =>{
+            this.setState({paintings: data});
+          });
       }
     }
 

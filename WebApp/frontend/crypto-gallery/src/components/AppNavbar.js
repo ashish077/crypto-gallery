@@ -9,14 +9,14 @@ export default class AppNavbar extends Component {
         this.state = {isOpen: false};
         this.toggle = this.toggle.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
-        this.contract = {};
-        this.provider = {};
-        getConnection().then(({provider, contract}, err) => {
-            this.contract = contract;
-            this.provider = provider;
-            console.log(this.contract);
-            console.log(this.provider);
-        });
+        // this.contract = {};
+        // this.provider = {};
+        // getConnection().then(({provider, contract}, err) => {
+        //     this.contract = contract;
+        //     this.provider = provider;
+        //     console.log(this.contract);
+        //     console.log(this.provider);
+        // });
     }
 
     toggle() {
@@ -36,7 +36,8 @@ export default class AppNavbar extends Component {
           console.log("Exception occurred while trying to fetch current metamask address.");
         }
         
-        const cryptocontract = this.contract;
+        // const cryptocontract = this.contract;
+        const cryptocontract = window.contract;
         const register = await cryptocontract.register()
         .catch(function(e){
           console.log("Exception while trying to register.");
