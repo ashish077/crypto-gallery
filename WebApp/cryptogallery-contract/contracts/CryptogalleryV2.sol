@@ -1,26 +1,47 @@
 pragma solidity ^0.6.2;
 // SPDX-License-Identifier: UNLICENSED
+import "./ERC20CARAT.sol";
+
+
 contract CryptogalleryV2 {
 
-    address payable public owner;
-    uint uid;
+    string public name;
+    address payable public admin;
+    uint public uid;
+    ERC20CARAT public tokenContract;
+    uint256 public tokenPrice;
+    uint256 public tokensSold;
 
-    struct artDetails {        
-        address artistAddress;
+    struct artDetails {
         address owner;
-        string artistName;
+        address artistAddress;
         string description;
         uint price;
         uint id;
     }
+
+    event artAdded(
+        uint id,
+        uint price,
+        address owner
+    );
+
+    event artPurchased(
+        uint id,
+        address owner,
+        address artistAddress,
+        bool success
+    );
+
+    event artUpdated(
+        uint id,
+        address owner,
+        bool success
+    );
     
     mapping(uint => artDetails) public artData;
     mapping(uint => bool) public artOnSale;
 
-    mapping(address => uint[]) public artOwners; //Mapping to hold the list of uids bought by a buyer.
-    mapping(address => uint[]) public artSellers; //Mapping to hold the list of uids sold by an artist.
-
-    // mapping(address => string) public userNames;
     mapping(address => int) public users;
 
     modifier onlyRegisteredUser {
@@ -29,13 +50,17 @@ contract CryptogalleryV2 {
     }
 
     modifier onlyArtist (uint artId) {
-        require(artData[artId].artistAddress == msg.sender);
+        require(artData[artId].owner == msg.sender);
         _;
     }
 
 
-    constructor () public  {
-        owner = msg.sender; // Deployer of the application.
+    constructor (ERC20CARAT _tokenContract, uint256 _tokenPrice) public  {
+        admin = msg.sender; // Deployer of the application.
+        name = "Crypto Gallery Marketplace";
+        admin = msg.sender;
+        tokenContract = _tokenContract;
+        tokenPrice = _tokenPrice;
         uid = 100;
     }
 
@@ -44,33 +69,34 @@ contract CryptogalleryV2 {
         users[msg.sender] = 1;
     }
     
-    function addArt(uint id, string calldata description, uint price) external onlyRegisteredUser returns(uint artuid) {
+    function addArt(string calldata description, uint price) external onlyRegisteredUser returns(uint artuid) {
         artDetails memory art;
-        art.id = id; // Generates a unique identifier for the art being added
-        art.artistAddress = msg.sender;
+        uid = uid + 1;
+        art.id = uid; // Generates a unique identifier for the art being added
         art.description = description;
         art.price = price;
         art.owner = msg.sender;
-        artData[id] = art;
+        art.artistAddress = msg.sender;
+        artData[uid] = art;
 
-        artOnSale[id] = true;
-
-        uid = uid + 1; // Increment uid for future additions.
-        return id; // Return the unique id created for the art.
+        artOnSale[uid] = true;
+        emit artAdded(uid, price, msg.sender);
+        return art.id;
     }
 
     function purchaseArt(uint artId) external onlyRegisteredUser payable  returns(bool success){
         // Check if there is sufficient balance for the purchase
-        // require(msg.value == artData[artId].price);
-        require(msg.value <= address(msg.sender).balance);
+        // require(msg.value <= address(msg.sender).balance);
+        require(artData[artId].owner != msg.sender, "Buyer is already the owner of this Art.");
+        require(artOnSale[artId]);
 
-        address artist = artData[artId].artistAddress;
-        // artData[artId].artistAddress.transfer(msg.value);
+        address artist = artData[artId].owner;
         payable(artist).transfer(msg.value);
-
-        artOwners[msg.sender].push(artId);
+        
         artOnSale[artId] = false;
+        artData[artId].owner = msg.sender;
 
+        emit artPurchased(artId, msg.sender, artData[artId].artistAddress, true);
         return true;
     }
 
@@ -81,6 +107,7 @@ contract CryptogalleryV2 {
     function manageArt(uint artId, uint8 updatedPrice) external onlyArtist(artId) returns(bool success){
         require(artOnSale[artId] == true);
         artData[artId].price = updatedPrice;
+        emit artUpdated(artId, msg.sender, true);
         return true;
     }
     

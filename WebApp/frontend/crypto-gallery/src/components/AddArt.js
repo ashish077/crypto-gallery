@@ -1,5 +1,5 @@
 import React, { Component, useRef} from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Button, Container, Form, FormGroup, Input, Label } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import axios from "axios";
@@ -57,32 +57,78 @@ class AddArt extends Component {
         var newId;
         event.preventDefault();
         const item = {...this.state.item};
-        const formData = new FormData();
-        formData.append("title", item.title);
-        formData.append("description", item.description);
-        formData.append("price", item.price);
-        formData.append("image", item.image);
-        formData.append("owner", window.addressArray[0]);
-        console.log(formData);
-        await fetch('http://localhost:4000/addart', {
-            method: 'POST',
-        
-            body: formData,
-        }).then((res) => res.json())
-        .then(data => {
-            newId = data.id;
-            alert("Upload success");
-        })
-        .catch((err) => alert("File Upload Error" + err));
-        // const cryptocontract = window.contract;
         const address = await window.web3.eth.getAccounts();
-        // const addArt = await cryptocontract.addArt(parseInt(newId), item.description, item.price, {value:String(ethers.utils.parseEther(String(0)))})
-        const addArt = await window.contract.method.addArt(parseInt(newId), item.description, item.price).send({ from: address[0] })
-        .catch(function(e){
-            console.log("Exception while trying to Add Art to contract." + e);
+        await window.contract.methods.addArt(item.description, ethers.utils.parseEther(String(item.price)))
+        .send({from: address[0]}, function(err, res){
+            if(!err){
+                window.contract.methods.uid().call().then(res1 => {
+                    console.log("Here");
+                    console.log(res1.toNumber());
+                    newId = res1.toNumber();
+                }).then(res2 => {
+                    if(newId != undefined){
+                        const formData = new FormData();
+                        formData.append("id", newId);
+                        formData.append("title", item.title);
+                        formData.append("description", item.description);
+                        formData.append("price", item.price);
+                        formData.append("image", item.image);
+                        formData.append("owner", address[0]);
+                        console.log(formData);
+                        fetch('http://localhost:4000/addart', {
+                            method: 'POST',
+                        
+                            body: formData,
+                        }).then((res) => res.json())
+                        .then(data => {
+                            newId = data.id;
+                            alert("Upload success");
+                        })                        
+                        .then(res3 => {
+                           console.log(this.props);
+                        })
+                        .catch((err) => alert("File Upload Error" + err));
+                    }
+                    else{
+                        alert("Add Art smart contract function not executed.");
+                    }
+                })
+            }
+        })
+        .catch((err) => {
+            console.log(err);
         });
-        if(addArt == undefined){
+        this.props.history.push('/');     
+    }
+
+    async getNewId(){
+        var newId;
+        const item = {...this.state.item};
+        newId = await window.contract.methods.uid().call();
+        console.log("Receipt" + newId);
+        
+        if(newId != undefined){
+            const formData = new FormData();
+            formData.append("title", item.title);
+            formData.append("description", item.description);
+            formData.append("price", item.price);
+            formData.append("image", item.image);
+            formData.append("owner", window.addressArray[0]);
+            console.log(formData);
+            await fetch('http://localhost:4000/addart', {
+                method: 'POST',
+            
+                body: formData,
+            }).then((res) => res.json())
+            .then(data => {
+                newId = data.id;
+                alert("Upload success");
+            })
+            .catch((err) => alert("File Upload Error" + err));
             console.log("Add Art smart contract function not executed.");
+        }
+        else{
+            alert("Add Art smart contract function not executed.");
         }
 
         this.props.history.push('/');

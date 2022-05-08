@@ -67,7 +67,8 @@ app.post("/addart", (req, res, err) => {
       
       // console.log("Inside post");
       // console.log(data);
-      newId = data.length + 1;
+      // newId = data.length + 1;
+      newId = req.body.id;
         var newItem = {
           id: newId,
           title: req.body.title,
