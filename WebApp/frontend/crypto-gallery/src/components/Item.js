@@ -30,7 +30,7 @@ function Item({item, onClick}) {
           {item.price + ' ' + 'ETHER'}
         </Card.Text>
         <Card.Text>
-          {'Owner' + ' ' + item.owner}
+          {item.owner != "" ? 'Owner' + ' ' + item.owner : ""}
         </Card.Text>
         {/* <Card.Text>
           <Button variant="primary" className="buy btn btn-success" >Buy</Button>

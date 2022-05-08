@@ -74,8 +74,10 @@ class AddArt extends Component {
             alert("Upload success");
         })
         .catch((err) => alert("File Upload Error" + err));
-        const cryptocontract = window.contract;
-        const addArt = await cryptocontract.addArt(parseInt(newId), item.description, item.price, {value:String(ethers.utils.parseEther(String(0)))})
+        // const cryptocontract = window.contract;
+        const address = await window.web3.eth.getAccounts();
+        // const addArt = await cryptocontract.addArt(parseInt(newId), item.description, item.price, {value:String(ethers.utils.parseEther(String(0)))})
+        const addArt = await window.contract.method.addArt(parseInt(newId), item.description, item.price).send({ from: address[0] })
         .catch(function(e){
             console.log("Exception while trying to Add Art to contract." + e);
         });

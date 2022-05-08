@@ -38,11 +38,16 @@ export default class AppNavbar extends Component {
         }
         
         // const cryptocontract = this.contract;
-        const cryptocontract = window.contract;
-        const register = await cryptocontract.register()
-        .catch(function(e){
-          console.log("Exception while trying to register.");
-        });
+        const address = await window.web3.eth.getAccounts();
+        const result = await window.contract.methods.register().send({ from: address[0] })
+        .then(result => {
+            alert('Registration Successful');
+        })
+        // const cryptocontract = window.contract;
+        // const register = await cryptocontract.register()
+        // .catch(function(e){
+        //   console.log("Exception while trying to register.");
+        // });
     } 
 
     render() {
