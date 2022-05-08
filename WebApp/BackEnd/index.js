@@ -4,8 +4,9 @@ var fs = require("fs");
 const multer = require('multer');
 const app = express();
 var cors = require('cors');
-const port = 4000;
+const port = process.env.PORT|| 4000;
 var id = 100;
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -27,6 +28,10 @@ app.use(
   })
 );
 
+if (process.env.NODE_ENV === 'production')
+{
+ app.use(express.static('../frontend/crypto-gallery/build'));
+}
 app.get("/", (_req, res) => {
 
   let data;
