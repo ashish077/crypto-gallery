@@ -33,7 +33,7 @@ module.exports = {
    *
    * $ truffle test --network <network-name>
    */
-  contracts_build_directory: '../frontend/crypto-gallery/src/contracts',
+  contracts_build_directory: '../cryptogallery-app/frontned/src/contracts',
 
   networks: {
     // Useful for testing. The `development` name is special - truffle uses it by default
