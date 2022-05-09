@@ -7,6 +7,7 @@ import AddArt from './components/AddArt';
 import AppNavbar from './components/AppNavbar';
 import getConnection  from './components/connection.js';
 import CryptogalleryV2 from './contracts/CryptogalleryV2.json';
+import ERC20CARAT from './contracts/ERC20CARAT.json';
 
 class App extends Component{
   async componentWillMount() {
@@ -26,6 +27,8 @@ class App extends Component{
           CryptogalleryV2.networks[netId].address
         );
         window.contract = contract;
+        const tokenContract = new web3.eth.Contract(ERC20CARAT.abi, ERC20CARAT.networks[netId].address);
+        window.tokenContract = tokenContract;
         // console.log("Initial Address: " + window.addressArray[0]);
       }
       else{

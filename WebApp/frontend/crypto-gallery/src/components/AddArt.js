@@ -58,11 +58,12 @@ class AddArt extends Component {
         event.preventDefault();
         const item = {...this.state.item};
         const formData = new FormData();
+        const currentAddress = await window.web3.eth.getAccounts();
         formData.append("title", item.title);
         formData.append("description", item.description);
         formData.append("price", item.price);
         formData.append("image", item.image);
-        formData.append("owner", window.addressArray[0]);
+        formData.append("owner", currentAddress[0]);
         console.log(formData);
         await fetch('http://localhost:4000/addart', {
             method: 'POST',
@@ -75,9 +76,9 @@ class AddArt extends Component {
         })
         .catch((err) => alert("File Upload Error" + err));
         // const cryptocontract = window.contract;
-        const address = await window.web3.eth.getAccounts();
+        // const address = await window.web3.eth.getAccounts();
         // const addArt = await cryptocontract.addArt(parseInt(newId), item.description, item.price, {value:String(ethers.utils.parseEther(String(0)))})
-        const addArt = await window.contract.method.addArt(parseInt(newId), item.description, item.price).send({ from: address[0] })
+        const addArt = await window.contract.methods.addArt(parseInt(newId), item.description, item.price).send({ from: currentAddress[0] })
         .catch(function(e){
             console.log("Exception while trying to Add Art to contract." + e);
         });

@@ -20,12 +20,17 @@ class Home extends Component {
         //     this.contract = contract;
         //     this.provider = provider;
         // });
+        this.sampleCB = this.sampleCB.bind(this);
     }
 
     componentDidMount() {
         fetch("http://localhost:4000")
             .then(response => response.json())
             .then(data => this.setState({paintings: data}));
+    }
+
+    sampleCB(data) {
+      this.setState({paintings: data});
     }
     // let [paintings, setPaintings] = useState([]);
     // useEffect(() => {   
@@ -53,30 +58,38 @@ class Home extends Component {
       //if response is ok then call the contract to make the transaction with the address and amount
       // const cryptocontract = this.contract;
       // const cryptocontract = window.contract;
+      const sampleCB = this.sampleCB;
       const currentAddress =  await window.web3.eth.getAccounts();
       // const buy = await cryptocontract.purchaseArt(parseInt(item.id), {value:String(ethers.utils.parseEther(String(item.price)))})
-      const buy = await window.contract.methods.purchaseArt(parseInt(item.id)).send({from: currentAddress[0] , value: ethers.utils.parseEther(String(item.price))})
+      const buy = await window.contract.methods.purchaseArt(parseInt(item.id), (parseInt(item.price)*100)).send({from: currentAddress[0] , value: ethers.utils.parseEther(String(item.price))}
+      ,function(err, response){
+        if(!err){
+          fetch('http://localhost:4000/'+item.id + '/'+ currentAddress, {method: 'PUT'})
+          .then(response => response.json())
+          .then(data =>{
+            // this.setState({paintings: data});
+            sampleCB(data);
+          });
+        }
+      })
       .catch(function(e){
         console.log("Exception while trying to Buy Art." + e);
       });
-      if(buy !== undefined){
-          await buy.wait();
-          await fetch('http://localhost:4000/'+item.id + '/'+ currentAddress,
-          {
-            method: 'PUT'
-          }
-          )
-          .then(response => response.json())
-          .then(data =>{
-            this.setState({paintings: data});
-          });
-      }
+      // if(buy !== undefined){
+      //     await buy.wait();
+          
+      // }
     }
 
     async airdrop(){
+      const address = await window.web3.eth.getAccounts();
       console.log("AirDrop details");
-      console.log(this.toAddress.value);
-      console.log(ethers.utils.parseEther(String(this.amount.value)));
+      const price = window.web3.utils.toWei(this.amount.value.toString(), 'Ether');
+      const fromAddress = address[0];
+      await window.tokenContract.methods.transferFrom(fromAddress, this.toAddress.value, (parseInt(this.amount.value)*100)).send({ from: fromAddress})
+      .catch(err => {
+        alert("Exception occurred while transferring tokens. " + err);
+      });
     }
 
     render() {
@@ -86,7 +99,7 @@ class Home extends Component {
             <div>
             
               <Container fluid>
-                <div id="airdrop" className='airdrop'>
+              <div>
                   <h3 style={{fontFamily:"fantasy"}}>Air Drop CARAT Token</h3>
                   <section className="table-content">
                     <form className="form-inline" onSubmit={(event) => {
@@ -95,12 +108,14 @@ class Home extends Component {
                       const price = ethers.utils.parseEther(String(this.amount.value));
                       // this.props.transferFrom(this.props.account, toAddress, price)
                     }}>
-                    <label htmlFor="toAddress" style={{padding:"5px", fontFamily:"fantasy"}}>To Address:</label>
-                    <input type="text" placeholder="address"  ref={(input) => { this.toAddress = input }}
-                      style={{padding:"5px", fontFamily:"fantasy"}} required="" id="toAddress" />
-                    <label htmlFor="amount" style={{padding:"5px", fontFamily:"fantasy"}}>Amount:</label>
-                      <input type="text" placeholder="Amount" 
-                          required="" ref={(input) => { this.amount = input }} id="amount" style={{padding:"5px", fontFamily:"fantasy"}} />
+                    <label htmlFor="toAddress" className='airdrop'>To Address:</label>
+                    <input className='airdrop' type="text" placeholder="address"  ref={(input) => { this.toAddress = input }}
+                      required="" id="toAddress" />
+
+                    <label className='airdrop' htmlFor="amount">Amount:</label>
+                      <input className='airdrop' type="text" placeholder="Amount" 
+                          required="" ref={(input) => { this.amount = input }} id="amount"/>
+
                     <Button color="dark" onClick={this.airdrop} style={{ margin: '.5rem' }}>Send</Button>
                   </form> 
                   </section>  
