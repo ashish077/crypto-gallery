@@ -27,7 +27,7 @@ function Item({item, onClick}) {
           {item.description}          
         </Card.Text>
         <Card.Text>
-          {item.price + ' ' + 'ETHER'}
+          {item.price + ' ' + 'CARAT'}
         </Card.Text>
         <Card.Text>
           {item.owner != "" ? 'Owner' + ' ' + item.owner : ""}
