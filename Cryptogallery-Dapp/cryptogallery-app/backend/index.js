@@ -28,10 +28,7 @@ app.use(
   })
 );
 
-if (process.env.NODE_ENV === 'production')
-{
- app.use(express.static('../frontend/crypto-gallery/build'));
-}
+
 app.get("/", (_req, res) => {
 
   let data;
@@ -44,7 +41,6 @@ app.get("/", (_req, res) => {
 
 });
 
-app.get("/");
 
 app.post("/addart", (req, res, err) => {
     upload(req, res, function(error){
