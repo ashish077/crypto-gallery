@@ -14,7 +14,7 @@ import { ethers, Contract } from "ethers";
     const currentAddress =   await window.web3.eth.getAccounts();
     const currentOwner=currentAddress[0];
 
-    fetch("http://localhost:4000")
+    fetch("https://cryptogallery.herokuapp.com")
     .then(response => response.json())
     .then(data => {console.log("inside owned art");
                    

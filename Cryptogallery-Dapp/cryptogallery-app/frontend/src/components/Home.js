@@ -24,7 +24,7 @@ class Home extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:4000")
+        fetch("https://cryptogallery.herokuapp.com")
             .then(response => response.json())
             .then(data => this.setState({paintings: data}));
     }
@@ -64,7 +64,7 @@ class Home extends Component {
       const buy = await window.contract.methods.purchaseArt(parseInt(item.id), (parseInt(item.price)*100)).send({from: currentAddress[0] , value: ethers.utils.parseEther(String(item.price))}
       ,function(err, response){
         if(!err){
-          fetch('http://localhost:4000/'+item.id + '/'+ currentAddress, {method: 'PUT'})
+          fetch('https://cryptogallery.herokuapp.com/'+item.id + '/'+ currentAddress, {method: 'PUT'})
           .then(response => response.json())
           .then(data =>{
             // this.setState({paintings: data});
