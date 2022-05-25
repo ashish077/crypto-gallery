@@ -1,3 +1,59 @@
 [
-  
-]
+    {
+      "id": 1,
+      "title": "Sample",
+      "description": "Sample description",
+      "price": "5",
+      "src": "http://localhost:4000/images/1652066209016-p01.jpg",
+      "owner": "0x73f2DB05532423d1bAc580b2B7e964E910b6a93B"
+    },
+    {
+      "id": 2,
+      "title": "Dolphins",
+      "description": "Dolphins",
+      "price": "10",
+      "src": "http://localhost:4000/images/1652066251001-p02.jpg",
+      "owner": [
+        "0x73f2DB05532423d1bAc580b2B7e964E910b6a93B"
+      ],
+      "sold": "true"
+    },
+    {
+      "id": 3,
+      "title": "Starry Lights",
+      "description": "a painting adapted from starry lights painting of van goh",
+      "price": "10",
+      "src": "http://localhost:4000/images/1653281492870-6.jpg",
+      "owner": "0xb8924665D1e9d30BE4e7BD73bD2d128a9aba59F9"
+    },
+    {
+      "id": 4,
+      "title": "Dog",
+      "description": "a dog portrait",
+      "price": "1",
+      "src": "http://localhost:4000/images/1653314402258-1.jpg",
+      "owner": [
+        "0xb8924665D1e9d30BE4e7BD73bD2d128a9aba59F9"
+      ],
+      "sold": "true"
+    },
+    {
+      "id": 5,
+      "title": "penguin",
+      "description": "a penguin painting",
+      "price": "1",
+      "src": "http://localhost:4000/images/1653314484169-7.jpg",
+      "owner": "0xb8924665D1e9d30BE4e7BD73bD2d128a9aba59F9"
+    },
+    {
+      "id": 6,
+      "title": "padfa",
+      "description": "asd;lfkjasd",
+      "price": "1",
+      "src": "http://localhost:4000/images/1653319255036-9.jpg",
+      "owner": [
+        "0xd3a3CBf3BDaC817b0Dc4d43ccdd0795B359Acb3d"
+      ],
+      "sold": "true"
+    }
+  ]
