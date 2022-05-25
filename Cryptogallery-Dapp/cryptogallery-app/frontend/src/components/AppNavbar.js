@@ -59,6 +59,7 @@ export default class AppNavbar extends Component {
                     </NavbarBrand>
                     <div className="float-left">
                         <Button color="dark" tag={Link} to={'/art/new'} style={{ margin: '.5rem' }}>Add Art</Button>
+                        <Button color="dark" tag={Link} to={'/art/myart'} style={{ margin: '.5rem' }}>My Art</Button>
                         <Button color="dark" onClick={this.handleRegister} style={{ margin: '.5rem' }}>Register</Button>
                     </div>
             </Navbar>

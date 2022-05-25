@@ -8,6 +8,7 @@ import AppNavbar from './components/AppNavbar';
 import getConnection  from './components/connection.js';
 import CryptogalleryV2 from './contracts/CryptogalleryV2.json';
 import ERC20CARAT from './contracts/ERC20CARAT.json';
+import OwnArt from './components/OwnArt';
 
 class App extends Component{
   async componentWillMount() {
@@ -51,6 +52,7 @@ class App extends Component{
         <Switch>
           <Route path='/' exact={true} component={Home}/>
           <Route path='/art/new' component={AddArt}/>
+          <Route path='/art/myart' component={OwnArt}/>
           {/* <Route path='/register' component={Home}/> */}
         </Switch>
       </Router>
